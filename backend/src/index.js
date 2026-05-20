@@ -38,7 +38,16 @@ if (process.env.NODE_ENV === "production") {
 
 const PORT = process.env.PORT || 5001;
 
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT} `);
-  mongoConnection();
-});
+const startServer = async () => {
+  try {
+    await mongoConnection();
+
+    server.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.log("Server startup error:", error);
+  }
+};
+
+startServer();
