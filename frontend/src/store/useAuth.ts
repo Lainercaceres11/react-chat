@@ -14,7 +14,7 @@ type AuthStore = {
   isUpdateProfile: boolean;
   isCheckingAuth: boolean;
   checkAuth: () => void;
-  signup: (data: AuthUser) => void;
+  signup: (data: { fullname: string; email: string; password: string }) => void;
   login: (data: { email: string; password: string }) => void;
   logout: () => void;
   updateProfile: (data: { profilePic: string }) => void;
@@ -22,13 +22,6 @@ type AuthStore = {
   socket: Socket | null;
   connectedSocket: () => void;
   disconnectSocket: () => void;
-};
-
-type AuthUser = {
-  _id_: string;
-  fullname: string;
-  email: string;
-  password: string;
 };
 
 export const useAuthStore = create<AuthStore>((set, get) => ({
@@ -57,7 +50,11 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     }
   },
 
-  signup: async (data: AuthUser) => {
+  signup: async (data: {
+    fullname: string;
+    email: string;
+    password: string;
+  }) => {
     set({ isSigningUp: true });
     try {
       const response = await axiosInstance.post("/auth/signup", data);
